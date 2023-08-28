@@ -21,7 +21,10 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
 
-      - name: 'Build Inventory Image'
+      - name: 'Build image'
         run: |
-          docker build . --tag ghcr.io/ancora/software/mssql:latest
-          docker push ghcr.io/ancorasoftware/mssql:latest
+          docker build . --tag ghcr.io/AncoraSoftware/mssql:latest
+          
+      - name: 'Push image'
+        run: |
+          docker push ghcr.io/AncoraSoftware/mssql:latest
