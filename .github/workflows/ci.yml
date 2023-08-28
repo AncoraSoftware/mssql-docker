@@ -23,8 +23,8 @@ jobs:
 
       - name: 'Build image'
         run: |
-          docker build . --tag ghcr.io/AncoraSoftware/mssql:latest
+          docker build . --tag ghcr.io/ancorasoftware/mssql:latest
           
       - name: 'Push image'
         run: |
-          docker push ghcr.io/AncoraSoftware/mssql:latest
+          docker push ghcr.io/ancorasoftware/mssql:latest
