@@ -8,9 +8,7 @@ docker pull  ghcr.io/ancorasoftware/mssql:latest
 ## Usage
 
 ```bash
-MSYS_NO_PATHCONV=1 docker run -e "ACCEPT_EULA=Y" -e 'MSSQL_SA_PASSWORD=yourStrong(!)Password' -e 'MSSQL_PID=Express' -e "MSSQL_DB_NAME=testing" -v "$PWD/sql:/sql" -p 1433:1433 ghcr.io/ancorasoftware/mssql:latest
-
-docker run -e "ACCEPT_EULA=Y" -e "MSSQL_PID=Express" -e "MSSQL_DB_NAME=testing" -v "$PWD/sql:/sql" -p 1433:1433 ghcr.io/ancorasoftware/mssql:latest
+MSYS_NO_PATHCONV=1 docker run -e "ACCEPT_EULA=Y" -e 'MSSQL_SA_PASSWORD=yourStrong(!)Password' -e 'MSSQL_PID=Express' -e "MSSQL_DB_NAME=testing" -v "$PWD/sql:/sql" -p 1433:1433 ghcr.io/AncoraSoftware/mssql:latestancorasoftware/mssql:latest  
 ```
 
 ## Enhancements
@@ -43,11 +41,3 @@ Additionally, this image supports all of the environment variables supported by 
 
 
 For a complete list of environment variables that can be used, refer to the documentation here.
-
-
-https://github.com/tracker1/mssql-docker-enhanced/blob/main/scripts/start.bash
-
-
-```PowerShell
-docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=yourStrong(!)Password" -e "MSSQL_PID=Express" -p 1433:1433 ancora-sql
-```
