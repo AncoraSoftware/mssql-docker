@@ -1,6 +1,6 @@
 # Custom Microsoft SQL Server - Ubuntu based image
 
-[![Image tags](https://ghcr-badge.egpl.dev/ancorasoftware/mssql/tags?color=%2344cc11&ignore=&n=3&label=image+tags)](https://shields.io/)
+[![Image tags](https://ghcr-badge.egpl.dev/AncoraSoftware/mssql-docker/tags?color=%2344cc11&ignore=&n=3&label=image+tags)](https://github.com/AncoraSoftware/mssql-docker/pkgs/container/mssql)
 
 ```shell
 docker pull  ghcr.io/ancorasoftware/mssql:latest
@@ -40,4 +40,4 @@ Additionally, this image supports all of the environment variables supported by 
     - `EnterpriseCore` : This will run the container using the Enterprise Edition Core
 
 
-For a complete list of environment variables that can be used, refer to the documentation here.
+For a complete list of environment variables that can be used, [refer to the documentation here](https://hub.docker.com/_/microsoft-mssql-server).
