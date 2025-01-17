@@ -40,7 +40,7 @@ echo "SQL Server Started, "
 if [ -d "/sql" ]; then
   for sql_script in $(ls /sql/*.sql | sort); do
     echo "Executing SQL script: $sql_script" 
-    /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -d $MSSQL_DB_NAME -i $sql_script
+    /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -d master -i $sql_script
   done
 fi
 
