@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/mssql/server:2019-CU13-ubuntu-20.04
+ARG BASE_TAG=2022-CU11-ubuntu-22.04
+FROM mcr.microsoft.com/mssql/server:${BASE_TAG}
 
 USER root
 ENV DEBIAN_FRONTEND=noninteractive \

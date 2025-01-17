@@ -15,14 +15,6 @@ MSYS_NO_PATHCONV=1 docker run -e "ACCEPT_EULA=Y" -e 'MSSQL_SA_PASSWORD=yourStron
 
 This image will execute all SQL (`*.sql`) scripts under the `/scripts` directory. The default database targeted by these scripts will be the `$MSSQL_DB_NAME` environment variable (see below).
 
-## Environment Variables
-
-### Custom environment variables
-
-This image defines the following 
-
-- `MSSQL_DB_NAME` - The name of the target database. This data will be automatically created if it does not exist.
-
 ### Base image environment variables
 
 Additionally, this image supports all of the environment variables supported by the base image:

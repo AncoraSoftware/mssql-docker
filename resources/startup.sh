@@ -36,23 +36,9 @@ grep -q "Service Broker manager has started" <(tail -q -n 1000 -F /tmp/sqlserver
 sleep 3
 echo "SQL Server Started, "
 
-# Run script that accepts variables that will create database and user if needed
-echo "Initializing Database..."
-
-# Create the database if it doesn't exist.
-echo "Creating target DB..."
-cat <<EOF > /tmp/mkdb.sql
-  IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'MyTestDataBase')
-  BEGIN
-    CREATE DATABASE $MSSQL_DB_NAME;
-  END
-EOF
-/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -i /tmp/mkdb.sql
-rm -f /tmp/mkdb.sql
-
-# Execute user-defined SQL scripts.
+# Execute user-defined SQL scripts in lexicographical order.
 if [ -d "/sql" ]; then
-  for sql_script in /sql/*.sql; do
+  for sql_script in $(ls /sql/*.sql | sort); do
     echo "Executing SQL script: $sql_script" 
     /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -d $MSSQL_DB_NAME -i $sql_script
   done

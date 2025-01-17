@@ -10,6 +10,9 @@ jobs:
   publish-image:
     name: 'Publish image'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        base_tag: [2022-CU16-ubuntu-22.04,2022-latest,2019-CU30-ubuntu-20.04,2019-latest,latest]
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
@@ -23,8 +26,8 @@ jobs:
 
       - name: 'Build image'
         run: |
-          docker build . --tag ghcr.io/ancorasoftware/mssql:latest
-          
+          docker build . --build-arg BASE_TAG=${{matrix.base_tag}} --tag ghcr.io/ancorasoftware/mssql:${{matrix.base_tag}}
+
       - name: 'Push image'
         run: |
-          docker push ghcr.io/ancorasoftware/mssql:latest
+          docker push ghcr.io/ancorasoftware/mssql:${{matrix.base_tag}}
