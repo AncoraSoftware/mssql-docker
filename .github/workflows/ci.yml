@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         base_tag: [2022-CU16-ubuntu-22.04,2022-latest,2019-CU30-ubuntu-20.04,2019-latest,latest]
+        
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
@@ -24,9 +25,20 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
 
+      - name: 'Select Dockerfile'
+        run: |
+          if [[ ${{matrix.base_tag}} == 2022* ]]; then
+            echo "DOCKERFILE=Dockerfile.2022" >> $GITHUB_ENV
+          elif [[ ${{matrix.base_tag}} == 2019* ]]; then
+            echo "DOCKERFILE=Dockerfile.2019" >> $GITHUB_ENV
+          else
+            echo "Unsupported base tag: ${{matrix.base_tag}}"
+            exit 1
+          fi
+
       - name: 'Build image'
         run: |
-          docker build . --build-arg BASE_TAG=${{matrix.base_tag}} --tag ghcr.io/ancorasoftware/mssql:${{matrix.base_tag}}
+          docker build -f ${{ env.DOCKERFILE }} . --build-arg BASE_TAG=${{matrix.base_tag}} --tag ghcr.io/ancorasoftware/mssql:${{matrix.base_tag}}
 
       - name: 'Push image'
         run: |

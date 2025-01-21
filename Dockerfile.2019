@@ -1,21 +1,21 @@
-ARG BASE_TAG=2022-CU11-ubuntu-22.04
+ARG BASE_TAG=2019-latest
 FROM mcr.microsoft.com/mssql/server:${BASE_TAG}
 
 USER root
 ENV DEBIAN_FRONTEND=noninteractive \
-    MSSQL_DB_NAME=db
+    MSSQL_DB_NAME=db \
+    PATH="$PATH:/opt/mssql-tools/bin"
 
-# iptables to restrict access until database is ready
+# Install ODBC Driver 17 for SQL Server and nftables to restrict access until database is ready
 RUN apt-get update \
-    && apt-get install -yqq iptables \
+    && apt-get install -yqq gnupg2 curl iptables \
+    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && apt-get update \
+    && ACCEPT_EULA=Y apt-get install -yqq msodbcsql17 \
     && apt-get clean autoclean \
     && apt-get autoremove --yes \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/
-
-# Add latest matching FTS package
-ADD https://packages.microsoft.com/ubuntu/20.04/mssql-server-2019/pool/main/m/mssql-server-fts/mssql-server-fts_15.0.4178.1-3_amd64.deb /root/
-RUN dpkg --extract /root/mssql-server-fts_15.0.4178.1-3_amd64.deb / \
-    && rm /root/mssql-server-fts_15.0.4178.1-3_amd64.deb
 
 # Add latest mssql-tools
 ADD https://packages.microsoft.com/ubuntu/20.04/prod/pool/main/m/mssql-tools/mssql-tools_17.8.1.1-1_amd64.deb /root/
@@ -28,4 +28,7 @@ HEALTHCHECK --timeout=5s --retries=5 \
 COPY ./resources/startup.sh /startup.sh
 RUN chmod +x /startup.sh
 
+# Run container with necessary capabilities
 CMD ["/startup.sh"]
+
+# CMD ["bash", "-c", "exec /startup.sh --cap-add=NET_ADMIN"]

@@ -15,9 +15,10 @@ echo "Starting SQL Server..."
 # remove prior runtime log - this outputs to docker anyway.
 [ -f "/tmp/sqlserver.log" ] && rm /tmp/sqlserver.log
 
-# Block outside connections until ready
-iptables -A INPUT -p tcp -s 127.0.0.1 --destination-port 1433 -j ACCEPT
-iptables -A INPUT -p tcp --destination-port 1433 -j DROP
+echo "Blocking outside connections until ready."
+iptables-legacy -A INPUT -i lo -p tcp --dport 1433 -j ACCEPT
+# iptables-legacy -A INPUT -p tcp -s localhost --dport 1433 -j ACCEPT
+iptables-legacy -A INPUT -p tcp --dport 1433 -j DROP
 
 # run SQL Server in the background
 nohup /opt/mssql/bin/sqlservr --accept-eula 2>&1 > /tmp/sqlserver.log &
@@ -40,15 +41,16 @@ echo "SQL Server Started, "
 if [ -d "/sql" ]; then
   for sql_script in $(ls /sql/*.sql | sort); do
     echo "Executing SQL script: $sql_script" 
-    /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -d master -i $sql_script
+    sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -d master -i "$sql_script" -C
   done
 fi
 
-# Remove existing iptables rules, and allow app 1433 connections for mssql
+# Remove existing iptables-legacy rules, and allow app 1433 connections for mssql
 sleep 1
-iptables -D INPUT -p tcp -s 127.0.0.1 --destination-port 1433 -j ACCEPT
-iptables -D INPUT -p tcp --destination-port 1433 -j DROP
-iptables -I INPUT -p tcp --destination-port 1433 -j ACCEPT
+echo "Restoring outside connections."
+# iptables-legacy -D INPUT -p tcp -s localhost --dport 1433 -j ACCEPT
+# iptables-legacy -D INPUT -p tcp --dport 1433 -j DROP
+iptables-legacy -I INPUT -p tcp --dport 1433 -j ACCEPT
 touch /var/opt/mssql/sql-server-up.marker
 
 echo "Ready for connections"

@@ -1,0 +1,21 @@
+ARG BASE_TAG=2022-latest
+FROM mcr.microsoft.com/mssql/server:${BASE_TAG}
+
+USER root
+ENV DEBIAN_FRONTEND=noninteractive \
+    MSSQL_DB_NAME=db \
+    PATH="$PATH:/opt/mssql-tools18/bin"
+
+RUN apt-get update \
+    && apt-get install -yqq iptables \
+    && apt-get clean autoclean \
+    && apt-get autoremove --yes \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/
+    
+HEALTHCHECK --timeout=5s --retries=5 \
+    CMD /bin/bash -c "test -f /var/opt/mssql/sql-server-up.marker"
+
+COPY ./resources/startup.sh /startup.sh
+RUN chmod +x /startup.sh
+
+CMD ["/startup.sh"]
