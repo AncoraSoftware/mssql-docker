@@ -2,9 +2,6 @@
 
 ![base image](https://img.shields.io/badge/base_image-ghcr%2eio%2fancorasoftware%2fmssql-lime)
 [![Image tags](https://ghcr-badge.egpl.dev/AncoraSoftware/mssql/tags?color=%2344cc11&n=6&label=image+tags)](https://github.com/AncoraSoftware/mssql-docker/pkgs/container/mssql)
-![alt text](image.png)
-
-
 
 
 ```shell
