@@ -1,23 +1,28 @@
 # Custom Microsoft SQL Server - Ubuntu based image
 
-[![Image tags](https://ghcr-badge.egpl.dev/AncoraSoftware/mssql-docker/tags?color=%2344cc11&ignore=&n=3&label=image+tags)](https://github.com/AncoraSoftware/mssql-docker/pkgs/container/mssql)
+![base image](https://img.shields.io/badge/base_image-ghcr%2eio%2fancorasoftware%2fmssql-lime)
+[![Image tags](https://ghcr-badge.egpl.dev/AncoraSoftware/mssql/tags?color=%2344cc11&n=6&label=image+tags)](https://github.com/AncoraSoftware/mssql-docker/pkgs/container/mssql)
+![alt text](image.png)
+
+
+
 
 ```shell
-docker pull  ghcr.io/ancorasoftware/mssql:latest
+docker pull  ghcr.io/AncoraSoftware/mssql:2022-latest
 ```
 ## Usage
 
 ```bash
-MSYS_NO_PATHCONV=1 docker run -e "ACCEPT_EULA=Y" -e 'MSSQL_SA_PASSWORD=yourStrong(!)Password' -e 'MSSQL_PID=Express' -e "MSSQL_DB_NAME=testing" -v "$PWD/sql:/sql" -p 1433:1433 ghcr.io/AncoraSoftware/mssql:latestancorasoftware/mssql:latest  
+MSYS_NO_PATHCONV=1 docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=yourStrong(!)Password" -e "MSSQL_PID=Express" -v "$PWD/sql:/sql" -p 1433:1433 ghcr.io/ancorasoftware/mssql:2022-latest
 ```
 
-## Enhancements
+### Startup SQL scripts
 
-This image will execute all SQL (`*.sql`) scripts under the `/scripts` directory. The default database targeted by these scripts is the `master` database; the  `USE` statement should be used accordingly.
+All SQL scripts (`*.sql`) mounted in the `/sql` will be executed during container startup as means of provisioning databases and performing SQL-based migrations. The default database targeted by these scripts is the `master` database; the `USE` statement must be used accordingly.
 
-### Base image environment variables
+### Configuration
 
-Additionally, this image supports all of the environment variables supported by the base image:
+This image supports all of the environment variables supported by the base image, notably:
 
 - `ACCEPT_EULA` - confirms your acceptance of the End-User Licensing Agreement.
 
