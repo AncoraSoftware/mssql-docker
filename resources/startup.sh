@@ -17,7 +17,6 @@ echo "Starting SQL Server..."
 
 echo "Blocking outside connections until ready."
 iptables-legacy -A INPUT -i lo -p tcp --dport 1433 -j ACCEPT
-# iptables-legacy -A INPUT -p tcp -s localhost --dport 1433 -j ACCEPT
 iptables-legacy -A INPUT -p tcp --dport 1433 -j DROP
 
 # run SQL Server in the background
@@ -45,7 +44,7 @@ if [ -d "/sql" ]; then
   done
 fi
 
-# Unblock/allow connections
+# Unblock/allow connections.
 sleep 1
 echo "Restoring outside connections."
 iptables-legacy -I INPUT -p tcp --dport 1433 -j ACCEPT
