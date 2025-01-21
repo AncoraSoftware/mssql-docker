@@ -37,7 +37,7 @@ grep -q "Service Broker manager has started" <(tail -q -n 1000 -F /tmp/sqlserver
 sleep 3
 echo "SQL Server Started, "
 
-# Execute user-defined SQL scripts in lexicographical order.
+# Execute user-defined SQL scripts.
 if [ -d "/sql" ]; then
   for sql_script in $(ls /sql/*.sql | sort); do
     echo "Executing SQL script: $sql_script" 
@@ -45,15 +45,11 @@ if [ -d "/sql" ]; then
   done
 fi
 
-# Remove existing iptables-legacy rules, and allow app 1433 connections for mssql
+# Unblock/allow connections
 sleep 1
 echo "Restoring outside connections."
-# iptables-legacy -D INPUT -p tcp -s localhost --dport 1433 -j ACCEPT
-# iptables-legacy -D INPUT -p tcp --dport 1433 -j DROP
 iptables-legacy -I INPUT -p tcp --dport 1433 -j ACCEPT
 touch /var/opt/mssql/sql-server-up.marker
-
 echo "Ready for connections"
 
-# Unblock/allow connections
 wait "$child"
