@@ -34,4 +34,4 @@ This image supports all of the environment variables supported by the base image
     - `EnterpriseCore` : This will run the container using the Enterprise Edition Core
 
 
-For a complete list of environment variables that can be used, [refer to the documentation here](https://hub.docker.com/_/microsoft-mssql-server).
+For a complete list of environment variables that can be used, [refer to the `mcr.microsoft.com/mssql/server` base image documentation](https://hub.docker.com/_/microsoft-mssql-server).
